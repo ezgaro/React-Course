@@ -54,10 +54,17 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [query, setQuery] = useState("batman");
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
+    if (query.length < 3) {
+      setMovies([]);
+      setError('');
+      return;
+    }
     setIsLoading(true);
+    setError("");
+
     fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`)
       .then((res) => {
         if (!res.ok) {
@@ -74,13 +81,13 @@ export default function App() {
         console.error(error.message);
         setError(error.message);
       })
-      .finally(() => setIsLoading(false)); // Corrected syntax
-  }, []);
+      .finally(() => setIsLoading(false));
+  }, [query]);
 
   return (
     <>
       <NavBar>
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </NavBar>
       <Main>
@@ -143,9 +150,7 @@ function NumResults({ movies }) {
   );
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
-
+function Search({ query, setQuery }) {
   return (
     <input
       className="search"
