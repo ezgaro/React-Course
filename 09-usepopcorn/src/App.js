@@ -53,14 +53,28 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [query, setQuery] = useState("batman");
 
-  useEffect(function () {
+  useEffect(() => {
     setIsLoading(true);
-    fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query} `)
-      .then((res) => res.json())
-      .then((data) => setMovies(data.Search));
-    setIsLoading(false);
+    fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Something went wrong");
+        }
+
+        return res.json();
+      })
+      .then((data) => {
+        if (data.Response === "False") throw new Error("Movie not found");
+        return setMovies(data.Search);
+      })
+      .catch((error) => {
+        console.error(error.message);
+        setError(error.message);
+      })
+      .finally(() => setIsLoading(false)); // Corrected syntax
   }, []);
 
   return (
@@ -70,7 +84,11 @@ export default function App() {
         <NumResults movies={movies} />
       </NavBar>
       <Main>
-        <Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
+        <Box>
+          {isLoading && <Loader />}
+          {!isLoading && !error && <MovieList movies={movies} />}
+          {error && <ErrorMessage message={error} />}
+        </Box>
         <Box>
           <WatchedSummary watched={watched} />
           <WatchedMovieList watched={watched} />
@@ -82,6 +100,14 @@ export default function App() {
 
 function Loader() {
   return <p className="loader">Loading...</p>;
+}
+
+function ErrorMessage({ message }) {
+  return (
+    <p className="error">
+      <span>🆘</span> {message}
+    </p>
+  );
 }
 
 const average = (arr) =>
