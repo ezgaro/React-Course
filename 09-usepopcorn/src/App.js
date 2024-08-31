@@ -97,7 +97,7 @@ export default function App() {
       .then((data) => {
         if (data.Response === "False") throw new Error("Movie not found");
         setMovies(data.Search);
-        setError('');
+        setError("");
       })
       .catch((error) => {
         console.error(error.message);
@@ -209,6 +209,16 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       document.title = "usePopcorn";
     };
   }, title);
+
+  useEffect(() => {
+    function callback(e) {
+      if (e.code === "Escape") onCloseMovie();
+    }
+    document.addEventListener("keydown", callback);
+    return () => {
+      document.removeEventListener("keydown", callback);
+    };
+  }, [onCloseMovie]);
   return (
     <div className="details">
       {isLoading ? (
