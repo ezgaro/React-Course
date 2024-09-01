@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import StarRating from "./StarRating";
 import "./index.css";
 import { useMovies } from "./useMovies";
+import { useLocalStorageState } from "./useLocalStorageState";
 
 const KEY = "f84fc31d";
 
@@ -10,10 +11,8 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
 
   const { isLoading, error, movies } = useMovies(query);
-  const [watched, setWatched] = useState(() => {
-    const storedValue = localStorage.getItem("watched");
-    return JSON.parse(storedValue);
-  });
+
+  const [watched, setWatched] = useLocalStorageState([], "watched");
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
@@ -32,10 +31,6 @@ export default function App() {
   function handleCloseMovie() {
     setSelectedId(null);
   }
-
-  useEffect(() => {
-    localStorage.setItem("watched", JSON.stringify(watched));
-  }, [watched]);
 
   return (
     <>
