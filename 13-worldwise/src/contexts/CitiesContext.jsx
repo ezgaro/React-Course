@@ -30,9 +30,11 @@ function CitiesProvider({ children }) {
   );
 }
 
-function CitiesHook() {
+function useCities() {
   const context = useContext(CitiesContext);
+  if (context === undefined)
+    throw new Error("CitiesContext was outside the CitiesProvider");
   return context;
 }
 
-export { CitiesProvider, CitiesHook };
+export { CitiesProvider, useCities };
