@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Product from "./pages/Product";
 import Pricing from "./pages/Pricing";
 import Homepage from "./pages/Homepage";
+import ProtectedRoute from "./pages/ProtectedRoute";
 import AppLayout from "./pages/AppLayout";
 import PageNotFound from "./pages/PageNotFound";
 import Login from "./pages/Login";
@@ -24,7 +25,14 @@ export default function App() {
             <Route path="product" element={<Product />}></Route>
             <Route path="pricing" element={<Pricing />}></Route>
             <Route path="login" element={<Login />}></Route>
-            <Route path="app" element={<AppLayout />}>
+            <Route
+              path="app"
+              element={
+                <ProtectedRoute>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
               <Route index element={<Navigate replace to="cities" />} />
               <Route path="cities" element={<CityList />}></Route>
               <Route path="cities/:id" element={<City />}></Route>
