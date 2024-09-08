@@ -6,7 +6,6 @@ const rootReducer = combineReducers({
   account: accountReducer,
   customer: customerReducer,
 });
-console.log(rootReducer);
 
 const store = createStore(rootReducer);
 
