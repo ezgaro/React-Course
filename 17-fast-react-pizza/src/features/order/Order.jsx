@@ -12,6 +12,7 @@ import {
 import OrderItem from '../order/OrderItem'
 import { useFetcher } from 'react-router-dom'
 import { useEffect } from 'react'
+import UpdateOrder from './UpdateOrder.jsx'
 
 function Order() {
     // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
@@ -21,8 +22,6 @@ function Order() {
     useEffect(() => {
         if (!fetcher.data && fetcher.state === 'idle') fetcher.load('/menu')
     }, [fetcher])
-
-    console.log(fetcher.data)
 
     const order = useLoaderData()
     const {
@@ -92,6 +91,8 @@ function Order() {
                     {formatCurrency(orderPrice + priorityPrice)}
                 </p>
             </div>
+
+            {!priority && <UpdateOrder order={order}></UpdateOrder>}
         </div>
     )
 }
