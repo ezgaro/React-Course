@@ -3,12 +3,11 @@ import Button from '../../ui/Button'
 import LinkButton from '../../ui/LinkButton'
 import CartItem from './CartItem'
 import { clearCart, getCart } from './cartSlice'
-import { getUsername } from '../user/userSlice'
 import EmptyCart from './EmptyCart'
 
 function Cart() {
     const cart = useSelector(getCart)
-    const username = useSelector(getUsername)
+    const username = useSelector((state) => state.user.username);
 
     const dispatch = useDispatch()
     if (!cart.length) return <EmptyCart />
