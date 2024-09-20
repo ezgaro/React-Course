@@ -31,7 +31,7 @@ export default function CabinTable() {
         <div>Price</div>
         <div>Discount</div>
         <div></div>
-      </Table.Header=>
+      </Table.Header>
       {cabins.map((cabin) => (
         <CabinRow cabin={cabin} key={cabin.id} />
       ))}
