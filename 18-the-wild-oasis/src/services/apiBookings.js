@@ -8,9 +8,14 @@ export async function getBookings({ filter, sortBy }) {
       "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabins(name), guests(fullName, email)"
     );
   //FLTER
-  if (filter !== null)
-    query = query[filter.method || "eq"](filter.field, filter.value);
+  if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
+
+  //SORTING
+  if (sortBy) {
+    query = query.order(sortBy.field, {ascending: sortBy.direction === 'asc'});
+  }
   const { data, error } = await query;
+
   if (error) {
     console.error(error);
     throw new Error("Bookings could not be created");
