@@ -1,18 +1,23 @@
 import { useState } from "react";
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
+import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
-import FormRowVertical from "../../ui/FormRowVertical";
+import { useLogin } from "./useLogin";
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("stefan@example.com");
+  const [password, setPassword] = useState("stefan");
+  const { login, isLoading } = useLogin();
 
-  function handleSubmit() {}
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!email || !password) return;
+  }
 
   return (
     <Form onSubmit={handleSubmit}>
-      <FormRowVertical label="Email address">
+      <FormRow label="Email address" orientation="vertical">
         <Input
           type="email"
           id="email"
@@ -21,8 +26,8 @@ function LoginForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-      </FormRowVertical>
-      <FormRowVertical label="Password">
+      </FormRow>
+      <FormRow label="Password" orientation="vertical">
         <Input
           type="password"
           id="password"
@@ -30,10 +35,10 @@ function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-      </FormRowVertical>
-      <FormRowVertical>
+      </FormRow>
+      <FormRow orientation="vertical">
         <Button size="large">Login</Button>
-      </FormRowVertical>
+      </FormRow>
     </Form>
   );
 }
